@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>Syunsuke_入力</title>
+  </head>
+<body>
+    <h1></h1>
+    <div class="container">
+        <div class="form-group">
+        <form action="{% url 'check2' %}" method="post">
+            {% csrf_token %}
+
+            <input class="form-control form-control-lg" rows="3" type="text" id="nyuryoku" placeholder="ここに貼り付けてください" name="nyuryoku">
+<p></p>
+            <input type="submit" class="btn btn-primary" value="送信">
+        </form>
+        </div>
+    </div>
+
+</body>
+</html>
