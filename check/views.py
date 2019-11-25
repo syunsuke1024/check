@@ -26,7 +26,7 @@ def check2(request):
     # print("-"*10)
 
     L = []
-    l = ["" for _ in range(18)]
+    l = ["" for _ in range(20)]
     week = ["日", "月", "火", "水", "木", "金", "土"]
     for i in range(32):
         if i == len(SD):
@@ -34,7 +34,7 @@ def check2(request):
         for j in range(100):
             if j == len(SD[i]):
                 L.append(l)
-                l = ["" for _ in range(18)]
+                l = ["" for _ in range(20)]
                 break
             if j == 0:
                 l[0] = SD[i][0]
@@ -57,7 +57,7 @@ def check2(request):
                     if "時" in SD[i][j]:
                         l[3] = SD[i][j]
             if "時" in l[3]:
-                if (j == 5 and l[5] == "") or (j == 6 and l[5] == ""):
+                if (j == 4 and l[5] == "") or (j == 5 and l[5] == ""):
                     if "時" in SD[i][j]:
                         l[4] = SD[i][j]
                         li = []
@@ -81,9 +81,10 @@ def check2(request):
                             l[17] = "danger"
 
     L[0] = ["日付", "曜日", "出勤?", "開始", "終了", "休1始", "休1終", "休2始", "休2終", "休3始", "休3終", "休4始", "休4終", "休1計", "休2計", "休3計",
-            "休4計","15分"]
+            "休4計","15分","6h","8h"]
 
-    DATA = [["" for j in range(18)] for i in range(32)]
+
+    DATA = [["" for j in range(20)] for i in range(32)]
 
     for i in range(len(L)):
         for j in range(len(L[i])):
@@ -101,6 +102,56 @@ def check2(request):
     for i in range(32):
         Dic[i] = d[i]
     # print(D)
+    Kansan = [["" for j in range(10)] for i in range(32)]
+    for i in range(1, 32):
+        if Dic[i][3] != "":
+            Kansan[i] = [0, 0, 1440, 1440, 1440, 1440, 0, 0, 0, 0]
+        if Dic[i][3] != "":
+            Kansan[i][0] = int(Dic[i][3][:2]) * 60 + int(Dic[i][3][3:5])
+        if Dic[i][4] != "":
+            Kansan[i][1] = int(Dic[i][4][:2]) * 60 + int(Dic[i][4][3:5])
+        if Dic[i][5] != "":
+            Kansan[i][2] = int(Dic[i][5][:2]) * 60 + int(Dic[i][5][3:5])
+        if Dic[i][7] != "":
+            Kansan[i][3] = int(Dic[i][7][:2]) * 60 + int(Dic[i][7][3:5])
+        if Dic[i][9] != "":
+            Kansan[i][4] = int(Dic[i][9][:2]) * 60 + int(Dic[i][9][3:5])
+        if Dic[i][11] != "":
+            Kansan[i][5] = int(Dic[i][11][:2]) * 60 + int(Dic[i][11][3:5])
+        if Dic[i][13] != "":
+            Kansan[i][6] = int(Dic[i][13][0]) * 60 + int(Dic[i][13][2:])
+        if Dic[i][14] != "":
+            Kansan[i][7] = int(Dic[i][14][0]) * 60 + int(Dic[i][14][2:])
+        if Dic[i][15] != "":
+            Kansan[i][8] = int(Dic[i][15][0]) * 60 + int(Dic[i][15][2:])
+        if Dic[i][16] != "":
+            Kansan[i][9] = int(Dic[i][16][0]) * 60 + int(Dic[i][16][2:])
+    for i in range(1, 32):
+        if Kansan[i][0] != "":
+            if Kansan[i][1] - Kansan[i][0] > 6 * 60:
+                kyukei = 0
+                for j in range(2, 6):
+                    if Kansan[i][j] <= Kansan[i][0] + 360:
+                        kyukei += Kansan[i][j + 4]
+                if kyukei >= 45:
+                    Dic[i][18] = "success"
+                else:
+                    Dic[i][18] = "danger"
+            else:
+                Dic[i][18] = "success"
+    for i in range(1, 32):
+        if Kansan[i][0] != "":
+            if Kansan[i][1] - Kansan[i][0] > 8 * 60 +45:
+                kyukei = 0
+                for j in range(2, 6):
+                    if Kansan[i][j] <= Kansan[i][0] + 525:
+                        kyukei += Kansan[i][j + 4]
+                if kyukei >= 60:
+                    Dic[i][19] = "success"
+                else:
+                    Dic[i][19] = "danger"
+            else:
+                Dic[i][19] = "success"
     context={}
     context["Dic"]=Dic
     return render(request,'check2.html',context)
