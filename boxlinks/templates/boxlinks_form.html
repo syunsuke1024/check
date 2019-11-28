@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load bootstrap %}
+{% block content %}
+
+  <!-- formタグを設定し、postメソッドを指定 -->
+  <form method="post">
+
+      <!-- 新規データ登録フォームを表示 -->
+      <div class="container">
+      {{ form|bootstrap }}
+
+      <!-- データ保存ボタンを設定 -->
+       <button class="btn btn-primary">保存して戻る</button>
+          <a class="btn btn-danger" href="{% url 'boxlinks:boxlinks_list' %}">保存せずに戻る</a>
+                 </tr>
+</div>
+       <!-- CSRF対策　-->
+      {% csrf_token %}
+
+      <!-- formタグを閉じる -->
+  </form>
+{% endblock %}
